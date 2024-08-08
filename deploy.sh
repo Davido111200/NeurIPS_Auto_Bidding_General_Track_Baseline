@@ -1,3 +1,2 @@
-docker build -t registry.cn-beijing.aliyuncs.com/nips_train_env/train_env:duqiao_td3_4000 -f ./Dockerfile .
-docker push registry.cn-beijing.aliyuncs.com/nips_train_env/train_env:duqiao_td3_4000
-
+docker build -t registry-intl.cn-beijing.aliyuncs.com/a2i2_test/test_phase:test -f ./Dockerfile .
+docker push registry-intl.cn-beijing.aliyuncs.com/a2i2_test/test_phase:test
