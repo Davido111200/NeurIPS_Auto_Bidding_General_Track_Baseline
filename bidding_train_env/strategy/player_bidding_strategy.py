@@ -2,9 +2,12 @@ import time
 import numpy as np
 import os
 import psutil
+import torch
 
 from bidding_train_env.strategy.base_bidding_strategy import BaseBiddingStrategy
-
+from bidding_train_env.strategy.bc_bidding_strategy import BcBiddingStrategy
+from bidding_train_env.strategy.iql_bidding_strategy import IqlBiddingStrategy
+from bidding_train_env.strategy.onlinelp_bidding_strategy import OnlineLpBiddingStrategy
 
 class PlayerBiddingStrategy(BaseBiddingStrategy):
     """
@@ -21,6 +24,18 @@ class PlayerBiddingStrategy(BaseBiddingStrategy):
 
         """
         super().__init__(budget, name, cpa, category)
+        self.bc_model = self.return_bc_model()
+        self.iql_model = self.return_iql_model()
+        self.onlinelp = self.return_onlinelp_model()
+
+    def return_bc_model(self):
+        return BcBiddingStrategy()
+    
+    def return_iql_model(self):
+        return IqlBiddingStrategy()
+
+    def return_onlinelp_model(self):
+        return OnlineLpBiddingStrategy()
 
     def reset(self):
         """
@@ -46,5 +61,22 @@ class PlayerBiddingStrategy(BaseBiddingStrategy):
         return:
             Return the bids for all the opportunities in the delivery period.
         """
+        bids_bc = self.bc_model.bidding(timeStepIndex, pValues, pValueSigmas, historyPValueInfo, historyBid,
+                historyAuctionResult, historyImpressionResult, historyLeastWinningCost)
+        
+        bids_iql = self.iql_model.bidding(timeStepIndex, pValues, pValueSigmas, historyPValueInfo, historyBid, 
+                historyAuctionResult, historyImpressionResult, historyLeastWinningCost)
+        
+        bids_onlinelp = self.onlinelp.bidding(timeStepIndex, pValues, pValueSigmas, historyPValueInfo, historyBid,
+                historyAuctionResult, historyImpressionResult, historyLeastWinningCost)
+        
+        bids_ori = self.cpa * pValues
 
-        return self.cpa * pValues
+        print("bids_bc: ", bids_bc, "\n"
+              "bids_iql: ", bids_iql, "\n"
+              "bids_onlinelp: ", bids_onlinelp, "\n"
+              "bids_ori: ", bids_ori, "\n")
+        
+        bids = (bids_iql + bids_onlinelp + bids_ori) / 3
+        
+        return bids
