@@ -3,6 +3,10 @@ import torch
 import pickle
 from bidding_train_env.strategy.base_bidding_strategy import BaseBiddingStrategy
 import os
+from datetime import datetime
+
+current_date = datetime.now().strftime("%Y-%m-%d")
+current_date = ("2024-08-09")
 
 
 class IqlBiddingStrategy(BaseBiddingStrategy):
@@ -10,17 +14,18 @@ class IqlBiddingStrategy(BaseBiddingStrategy):
     IQL Strategy
     """
 
-    def __init__(self, budget=100, name="Iql-PlayerStrategy", cpa=2, category=1):
+    def __init__(self, budget=100, name="Iql-PlayerStrategy", cpa=2, category=1, load_model=True):
         super().__init__(budget, name, cpa, category)
 
         file_name = os.path.dirname(os.path.realpath(__file__))
         dir_name = os.path.dirname(file_name)
         dir_name = os.path.dirname(dir_name)
-        model_path = os.path.join(dir_name,"saved_model","IQLtest","iql_model.pth")
-        dict_path = os.path.join(dir_name,"saved_model","IQLtest","normalize_dict.pkl")
-        self.model = torch.jit.load(model_path)
-        with open(dict_path, 'rb') as file:
-            self.normalize_dict = pickle.load(file)
+        model_path = os.path.join(dir_name,"saved_model", current_date, "IQLtest","iql_model.pth")
+        dict_path = os.path.join(dir_name,"saved_model", current_date,"IQLtest","normalize_dict.pkl")
+        if load_model:
+            self.model = torch.jit.load(model_path)
+            with open(dict_path, 'rb') as file:
+                self.normalize_dict = pickle.load(file)
 
     def reset(self):
         self.remaining_budget = self.budget

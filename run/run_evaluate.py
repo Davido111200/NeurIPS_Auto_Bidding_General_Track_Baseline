@@ -22,14 +22,17 @@ def getScore_nips(reward, cpa, cpa_constraint):
     return penalty * reward
 
 
-def run_test():
+def run_test(agent=None):
     """
     offline evaluation
     """
 
-    data_loader = TestDataLoader(file_path='./data/traffic/period-7.csv')
+    data_loader = TestDataLoader(file_path='./data/traffic/period-9.csv')
     env = OfflineEnv()
-    agent = PlayerBiddingStrategy()
+    
+    if agent is None:
+        agent = PlayerBiddingStrategy()
+    
     print(agent.name)
 
     keys, test_dict = data_loader.keys, data_loader.test_dict
@@ -97,6 +100,8 @@ def run_test():
     logger.info(f'CPA-real: {cpa_real}')
     logger.info(f'CPA-constraint: {cpa_constraint}')
     logger.info(f'Score: {score}')
+
+    return all_reward, all_cost, cpa_real, cpa_constraint, score
 
 
 if __name__ == '__main__':

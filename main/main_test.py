@@ -11,4 +11,4 @@ torch.manual_seed(1)
 np.random.seed(1)
 
 if __name__ == "__main__":
-    run_test()
+    test_result = run_test()

@@ -12,6 +12,6 @@ source ~/anaconda3/bin/activate /home/Projects/a2i2rl/NeurIPS_Auto_Bidding_Gener
 
 python main/main_iql.py &
 python main/main_bc.py & 
-python main/main_onlineLp.py &
+# python main/main_onlineLp.py &
 
 wait

@@ -1,4 +1,6 @@
 from .player_bidding_strategy import PlayerBiddingStrategy as PlayerBiddingStrategy
+from .iql_bidding_strategy import IqlBiddingStrategy as IqlBiddingStrategy
+from .bc_bidding_strategy import BcBiddingStrategy as BcBiddingStrategy
 # from .player_bidding_strategy_ori import PlayerBiddingStrategy as PlayerBiddingStrategy
 # from .iql_bidding_strategy import IqlBiddingStrategy as PlayerBiddingStrategy
 # from .bc_bidding_strategy import BcBiddingStrategy as PlayerBiddingStrategy

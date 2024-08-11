@@ -2,28 +2,33 @@ import numpy as np
 import torch
 import pickle
 import os
+from datetime import datetime
 
 from bidding_train_env.strategy.base_bidding_strategy import BaseBiddingStrategy
 
+current_date = datetime.now().strftime("%Y-%m-%d")
+current_date = ("2024-08-09")
 
 class BcBiddingStrategy(BaseBiddingStrategy):
     """
     Behavioral Cloning (bc) Strategy
     """
 
-    def __init__(self, budget=100, name="Bc-PlayerStrategy", cpa=2, category=1):
+    def __init__(self, budget=100, name="Bc-PlayerStrategy", cpa=2, category=1, load_model=True):
         super().__init__(budget, name, cpa, category)
+
 
         file_name = os.path.dirname(os.path.realpath(__file__))
         dir_name = os.path.dirname(file_name)
         dir_name = os.path.dirname(dir_name)
-        model_path = os.path.join(dir_name, "saved_model", "BCtest", "bc_model.pth")
-        dict_path = os.path.join(dir_name, "saved_model", "BCtest", "normalize_dict.pkl")
+        model_path = os.path.join(dir_name, "saved_model", current_date, "BCtest", "bc_model.pth")
+        dict_path = os.path.join(dir_name, "saved_model", current_date, "BCtest", "normalize_dict.pkl")
 
-        self.model = torch.jit.load(model_path)
+        if load_model:
+            self.model = torch.jit.load(model_path)
 
-        with open(dict_path, 'rb') as f:
-            self.normalize_dict = pickle.load(f)
+            with open(dict_path, 'rb') as f:
+                self.normalize_dict = pickle.load(f)
 
     def reset(self):
         self.remaining_budget = self.budget

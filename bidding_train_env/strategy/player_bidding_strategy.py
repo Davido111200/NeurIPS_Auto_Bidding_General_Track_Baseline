@@ -26,7 +26,7 @@ class PlayerBiddingStrategy(BaseBiddingStrategy):
         super().__init__(budget, name, cpa, category)
         self.bc_model = self.return_bc_model()
         self.iql_model = self.return_iql_model()
-        self.onlinelp = self.return_onlinelp_model()
+        # self.onlinelp = self.return_onlinelp_model()
 
     def return_bc_model(self):
         return BcBiddingStrategy()
@@ -67,18 +67,18 @@ class PlayerBiddingStrategy(BaseBiddingStrategy):
         bids_iql = self.iql_model.bidding(timeStepIndex, pValues, pValueSigmas, historyPValueInfo, historyBid, 
                 historyAuctionResult, historyImpressionResult, historyLeastWinningCost)
         
-        bids_onlinelp = self.onlinelp.bidding(timeStepIndex, pValues, pValueSigmas, historyPValueInfo, historyBid,
-                historyAuctionResult, historyImpressionResult, historyLeastWinningCost)
+        # bids_onlinelp = self.onlinelp.bidding(timeStepIndex, pValues, pValueSigmas, historyPValueInfo, historyBid,
+        #         historyAuctionResult, historyImpressionResult, historyLeastWinningCost)
         
         bids_ori = self.cpa * pValues
 
         print("bids_bc: ", bids_bc, "\n"
               "bids_iql: ", bids_iql, "\n"
-              "bids_onlinelp: ", bids_onlinelp, "\n"
+            #   "bids_onlinelp: ", bids_onlinelp, "\n"
               "bids_ori: ", bids_ori, "\n")
         
         bids = (bids_iql + bids_bc) / 2
 
-        bids = bids_iql
+        bids = bids_bc
         
         return bids
